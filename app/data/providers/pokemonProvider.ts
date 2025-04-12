@@ -4,6 +4,8 @@ import { usePokemonApi } from '../api/pokemonApi'
 export const PokemonProvider: DataProvider = {
   id: 'pokemon',
   displayName: 'Pokemon',
+  image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
+
   getCharacters: async (): Promise<Character[]> => {
     const { fetchCharacters, buildImageUrlFromId } = usePokemonApi()
     const data = await fetchCharacters()

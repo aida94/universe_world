@@ -13,18 +13,26 @@ const universes = Object.values(providers)
           Welcome to the home page!
         </h1>
       </header>
-      <div class="grid gap-4 xl:grid-cols-2">
+      <div class="grid gap-8 xl:grid-cols-2">
         <NuxtLink
           v-for="universe in universes"
           :key="universe.id"
           :to="`/${universe.id}/characters`"
-          class="transition-transform hover:scale-105"
+          class=""
         >
-          <PageSection :title="`${universe.displayName} Universe`">
-            <div class="space-y-4">
+          <UCard class="rounded-2xl shadow-md p-6 hover:shadow-xl hover:scale-102 transition text-center">
+            <h2 class="text-xl font-semibold text-gray-800">
+              {{ universe.displayName }} Universe
+            </h2>
+            <img
+              :src="universe.image"
+              :alt="universe.displayName"
+              class="size-48 rounded-full object-cover mx-auto"
+            >
+            <p class="text-gray-600 mt-2">
               Explore the characters of {{ universe.displayName }}
-            </div>
-          </PageSection>
+            </p>
+          </UCard>
         </NuxtLink>
       </div>
     </UContainer>

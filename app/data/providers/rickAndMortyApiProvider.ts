@@ -4,6 +4,8 @@ import { useRickAndMortyApi } from '../api/rickAndMortyApi'
 export const RickAndMortyProvider: DataProvider = {
   id: 'rick-and-morty',
   displayName: 'Rick & Morty',
+  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+
   getCharacters: async (): Promise<Character[]> => {
     const { fetchCharacters } = useRickAndMortyApi()
     const data = await fetchCharacters()
@@ -24,6 +26,7 @@ export const RickAndMortyProvider: DataProvider = {
       }
     })
   },
+
   getCharacterById: async (id: string): Promise<Character> => {
     const { fetchCharacterById } = useRickAndMortyApi()
     const character = await fetchCharacterById(Number(id))

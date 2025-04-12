@@ -11,6 +11,7 @@ export interface Character {
 export interface DataProvider {
   id: string
   displayName: string
+  image: string
   getCharacters: () => Promise<Character[]>
   getCharacterById: (id: string) => Promise<Character>
 }
