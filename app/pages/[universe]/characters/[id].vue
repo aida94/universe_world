@@ -71,6 +71,7 @@ function formatLabelKey(key: string): string {
               :alt="character.name"
               class="w-full h-60 object-contain rounded-xl"
             >
+            <UIcon name="mdi:cat" class="w-[150px] h-[150px]" />
           </template>
 
           <div class="space-y-4">

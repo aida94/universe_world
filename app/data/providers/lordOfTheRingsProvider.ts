@@ -14,9 +14,6 @@ export const LordOfTheRingsProvider: DataProvider = {
       name: [character.nameFirst, character.nameLast].filter(Boolean).join(' '),
       image: character.image || '',
       attributes: {
-        hobbies: character.hobbies,
-        age: character.age,
-        height: character.height,
       },
     }))
   },
