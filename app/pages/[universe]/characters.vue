@@ -15,7 +15,33 @@ const { data: characters, pending } = await useAsyncData(
     immediate: true,
   },
 )
+
+const storageKey = computed(() => `${universe.value?.displayName}-viewMode`)
+
 const viewMode = ref<'list' | 'grid'>('grid')
+
+// Initialize from localStorage on client-side only
+onMounted(() => {
+  try {
+    const savedMode = localStorage.getItem(storageKey.value) as 'list' | 'grid'
+    if (savedMode) {
+      viewMode.value = savedMode
+    }
+  }
+  catch (e) {
+    console.error('Failed to read from localStorage:', e)
+  }
+})
+
+// Save to localStorage when viewMode changes
+watch(viewMode, (newMode) => {
+  try {
+    localStorage.setItem(storageKey.value, newMode)
+  }
+  catch (e) {
+    console.error('Failed to save to localStorage:', e)
+  }
+})
 </script>
 
 <template>
