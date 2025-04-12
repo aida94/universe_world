@@ -28,8 +28,14 @@ export const PokemonProvider: DataProvider = {
       name: data.name,
       image: buildImageUrlFromId(data.id),
       attributes: {
+        name: data.name,
+        height: data.height,
+        weight: data.weight,
         abilities: data.abilities.map(ability => ability.ability.name),
+        types: data.types.map(type => type.type.name),
+        held_items: data.held_items.map(item => item.item.name),
       },
+
     }
   },
 }

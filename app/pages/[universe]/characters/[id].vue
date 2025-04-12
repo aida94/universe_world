@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import type { Attribute } from '~/data/providers/provider'
+
 const route = useRoute()
 const { providers } = useUniverseProvider()
 
 // Ensure these are being correctly extracted from the route
 const universeId = route.params.universe as string
 const characterId = route.params.id as string
-
-console.log('Route params:', { universeId, characterId }) // Debug log
 
 const universe = computed(() => {
   return providers[universeId]
@@ -28,14 +28,30 @@ const { data: character, pending, error } = await useAsyncData(
     immediate: true,
   },
 )
+
+function formatAttributeValue(value: Attribute): string {
+  if (Array.isArray(value)) {
+    return value.map(item =>
+      typeof item === 'string' ? item.replace(/-/g, ' ') : String(item),
+    ).join(', ')
+  }
+  if (typeof value === 'string') {
+    return value.replace(/-/g, ' ')
+  }
+  return String(value)
+}
+
+function formatLabelKey(key: string): string {
+  return `${key.replace(/_/g, ' ')}:`
+}
 </script>
 
 <template>
   <div class="py-8">
     <UContainer>
       <header class="border-b mb-8 py-2 text-xl">
-        <NuxtLink :to="`/${universeId}/characters`" class="text-secondary-600 hover:text-secondary-800">
-          ← Back to {{ universe?.displayName }} Characters
+        <NuxtLink :to="`/${universeId}/characters`" class="text-secondary-600 hover:text-secondary-800 flex items-center">
+          <UIcon name="i-lucide-chevron-left" class="mr-2" /> Back to {{ universe?.displayName }} Characters
         </NuxtLink>
       </header>
 
@@ -47,24 +63,31 @@ const { data: character, pending, error } = await useAsyncData(
         Error loading character: {{ error.message }}
       </div>
 
-      <div v-else-if="character" class="max-w-2xl mx-auto">
+      <div v-else-if="character" class="max-w-lg mx-auto">
         <UCard :title="character.name">
           <template #header>
             <img
               :src="character.image"
               :alt="character.name"
-              class="w-full h-64 object-cover"
+              class="w-full h-60 object-contain rounded-xl"
             >
           </template>
 
           <div class="space-y-4">
-            <ExampleCharacterDetail
+            <div
               v-for="(value, key) in character.attributes"
               :key="key"
-              :label="key"
+              class="flex gap-2 items-center"
             >
-              {{ value }}
-            </ExampleCharacterDetail>
+              <UButton
+                :label="formatLabelKey(key)"
+                color="primary"
+                variant="ghost"
+                class="!cursor-default hover:bg-transparent hover:text-primary-500 capitalize font-semibold"
+              />
+
+              <span>{{ formatAttributeValue(value) || "-" }}</span>
+            </div>
           </div>
         </UCard>
       </div>

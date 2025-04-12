@@ -92,12 +92,7 @@ watch(viewMode, (newMode) => {
           <UCard v-else>
             <div class="flex justify-between items-center">
               <div class="flex items-center space-x-4">
-                <img
-                  :src="character.image"
-                  :alt="character.name"
-                  width="60" height="60"
-                  class="border border-gray-100 p-1 rounded-full object-cover"
-                >
+                <UAvatar :src="character.image" size="xl" />
                 <h3 className="text-lg font-medium">
                   {{ character.name }}
                 </h3>

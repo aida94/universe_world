@@ -36,6 +36,7 @@ export const RickAndMortyProvider: DataProvider = {
       name: character.name,
       image: character.image,
       attributes: {
+        name: character.name,
         species: character.species,
         gender: character.gender,
         status: character.status,
