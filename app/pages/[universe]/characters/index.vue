@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Character } from '~/data/providers/provider'
+
 const route = useTypedRoute<{ universe: string }>()
 const { providers } = useUniverseProvider()
 
@@ -8,7 +10,7 @@ const universe = computed(() => {
   return providers[universeId]
 })
 
-const { data: characters, pending } = await useAsyncData(
+const { data: characters, status, error } = await useAsyncData<Character[]>(
   `${universeId}-characters`,
   async () => {
     if (!universe.value) {
@@ -54,11 +56,16 @@ watch(viewMode, (newMode) => {
     <UContainer>
       <header class="flex justify-between border-b mb-8 py-2 text-xl">
         <h1>{{ universe?.displayName }} Characters</h1>
+
         <DisplayMode v-model="viewMode" />
       </header>
 
-      <div v-if="pending" class="text-center py-8">
+      <div v-if="status === 'pending'" class="text-center py-8">
         Loading characters...
+      </div>
+
+      <div v-else-if="error" class="text-center py-8 text-red-600">
+        Error loading characters
       </div>
 
       <div
@@ -73,45 +80,17 @@ watch(viewMode, (newMode) => {
           :key="character.id"
           class="block transition-transform"
         >
-          <UCard v-if="viewMode === 'grid'" :title="character.name">
-            <div class="flex flex-col h-full">
-              <h3 className="text-lg font-medium mb-4">
-                {{ character.name }}
-              </h3>
+          <GridView
+            v-if="viewMode === 'grid'"
+            :character="character"
+            :universe-id="universeId"
+          />
 
-              <UniverseImage
-                :image="character.image"
-                :alt="character.name"
-                image-class="w-full h-50 object-scale-down mb-4"
-                icon-class="size-48 mx-auto text-neutral-600"
-              />
-
-              <div class="flex justify-end">
-                <NuxtLink :to="`/${universeId}/characters/${character.id}`">
-                  <UButton class="cursor-pointer hover:scale-102">
-                    View Details
-                  </UButton>
-                </NuxtLink>
-              </div>
-            </div>
-          </UCard>
-
-          <UCard v-else>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center space-x-4">
-                <UAvatar :src="character.image" size="xl" />
-                <h3 className="text-lg font-medium">
-                  {{ character.name }}
-                </h3>
-              </div>
-
-              <NuxtLink :to="`/${universeId}/characters/${character.id}`">
-                <UButton class="cursor-pointer">
-                  View Details
-                </UButton>
-              </NuxtLink>
-            </div>
-          </UCard>
+          <ListView
+            v-else
+            :character="character"
+            :universe-id="universeId"
+          />
         </div>
       </div>
 

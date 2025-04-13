@@ -3,7 +3,7 @@ interface Props {
   modelValue: 'list' | 'grid'
 }
 
-const props = defineProps<Props>()
+const { modelValue } = defineProps<Props>()
 const emit = defineEmits<{
   'update:modelValue': [value: 'list' | 'grid']
 }>()
@@ -25,6 +25,7 @@ function setViewMode(mode: 'list' | 'grid') {
       aria-label="Switch to grid view"
       @click="setViewMode('grid')"
     />
+
     <UButton
       icon="i-lucide-list"
       size="md"
