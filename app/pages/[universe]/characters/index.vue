@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const route = useRoute()
+const route = useTypedRoute<{ universe: string }>()
 const { providers } = useUniverseProvider()
 
-const universeId = route.params.universe as string
+const universeId = route.params.universe
 
 const universe = computed(() => {
   return providers[universeId]
@@ -10,7 +10,12 @@ const universe = computed(() => {
 
 const { data: characters, pending } = await useAsyncData(
   `${universeId}-characters`,
-  () => universe.value.getCharacters(),
+  async () => {
+    if (!universe.value) {
+      throw new Error(`Universe ${universeId} not undefined or null`)
+    }
+    return await universe.value.getCharacters()
+  },
   {
     immediate: true,
   },
