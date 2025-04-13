@@ -66,12 +66,21 @@ function formatLabelKey(key: string): string {
       <div v-else-if="character" class="max-w-lg mx-auto">
         <UCard :title="character.name">
           <template #header>
-            <img
-              :src="character.image"
-              :alt="character.name"
-              class="w-full h-60 object-contain rounded-xl"
-            >
-            <UIcon name="mdi:cat" class="w-[150px] h-[150px]" />
+            <template v-if="character.image.startsWith('http')">
+              <img
+                :src="character.image"
+                :alt="character.name"
+                class="w-full h-60 object-contain rounded-xl"
+              >
+            </template>
+            <template v-else>
+              <div class="flex justify-center items-center h-60">
+                <UIcon
+                  :name="character.image"
+                  class="size-48 text-neutral-600"
+                />
+              </div>
+            </template>
           </template>
 
           <div class="space-y-4">

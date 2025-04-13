@@ -24,13 +24,21 @@ const universes = Object.values(providers)
             <h2 class="text-xl font-semibold">
               {{ universe.displayName }} Universe
             </h2>
-            <img
-              :src="universe.image"
-              :alt="universe.displayName"
-              class="size-48 rounded-full object-cover mx-auto"
-            >
+            <template v-if="universe.image.startsWith('http')">
+              <img
+                :src="universe.image"
+                :alt="universe.displayName"
+                class="size-48 rounded-full object-cover mx-auto"
+              >
+            </template>
+            <template v-else>
+              <UIcon
+                :name="universe.image"
+                class="size-48 mx-auto text-secondary-400"
+              />
+            </template>
             <p class="mt-2">
-              Explore the characters of {{ universe.displayName }}
+              Explore the world of {{ universe.displayName }}
             </p>
           </UCard>
         </NuxtLink>

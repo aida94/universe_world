@@ -1,16 +1,18 @@
+import type { NatureAnimalCollectionItem } from '@nuxt/content'
 import type { Character, DataProvider } from './provider'
 import { queryCollection } from '#imports'
+import { generateIdFromString } from '~/utils/generateId'
 
 export const NatureProvider: DataProvider = {
   id: 'nature',
   displayName: 'Nature',
-  image: 'https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/folder-tree.svg',
+  image: 'mdi:cat',
 
   getCharacters: async (): Promise<Character[]> => {
     const animals = await queryCollection('natureAnimal').all()
 
-    return animals.map((animal, index) => ({
-      id: index + 1,
+    return animals.map((animal: NatureAnimalCollectionItem) => ({
+      id: generateIdFromString(animal.name),
       name: animal.name,
       image: animal.icon || '',
       attributes: {
@@ -20,14 +22,14 @@ export const NatureProvider: DataProvider = {
 
   getCharacterById: async (id: string): Promise<Character> => {
     const animals = await queryCollection('natureAnimal').all()
-    const animal = animals[Number(id) - 1]
+    const animal = animals.find((a: NatureAnimalCollectionItem) => generateIdFromString(a.name) === Number(id))
 
     if (!animal) {
       throw new Error(`Animal with id ${id} not found`)
     }
 
     return {
-      id: Number(id),
+      id: generateIdFromString(animal.name),
       name: animal.name,
       image: animal.icon || '',
       attributes: {
@@ -35,7 +37,6 @@ export const NatureProvider: DataProvider = {
         diet: animal.diet,
         size: animal.size,
         lifespan: animal.lifespan,
-        icon: animal.icon,
       },
     }
   },

@@ -1,5 +1,7 @@
+import type { LordOfTheRingsCharacterCollectionItem } from '@nuxt/content'
 import type { Character, DataProvider } from './provider'
 import { queryCollection } from '#imports'
+import { generateIdFromString } from '~/utils/generateId'
 
 export const LordOfTheRingsProvider: DataProvider = {
   id: 'lord-of-the-rings',
@@ -9,8 +11,8 @@ export const LordOfTheRingsProvider: DataProvider = {
   getCharacters: async (): Promise<Character[]> => {
     const characters = await queryCollection('lordOfTheRingsCharacter').all()
 
-    return characters.map((character, index) => ({
-      id: index + 1,
+    return characters.map((character: LordOfTheRingsCharacterCollectionItem) => ({
+      id: generateIdFromString([character.nameFirst, character.nameLast].filter(Boolean).join(' ')),
       name: [character.nameFirst, character.nameLast].filter(Boolean).join(' '),
       image: character.image || '',
       attributes: {
@@ -20,14 +22,16 @@ export const LordOfTheRingsProvider: DataProvider = {
 
   getCharacterById: async (id: string): Promise<Character> => {
     const characters = await queryCollection('lordOfTheRingsCharacter').all()
-    const character = characters[Number(id) - 1]
+    const character = characters.find((c: LordOfTheRingsCharacterCollectionItem) =>
+      generateIdFromString([c.nameFirst, c.nameLast].filter(Boolean).join(' ')) === Number(id),
+    )
 
     if (!character) {
       throw new Error(`Character with id ${id} not found`)
     }
 
     return {
-      id: Number(id),
+      id: generateIdFromString([character.nameFirst, character.nameLast].filter(Boolean).join(' ')),
       name: [character.nameFirst, character.nameLast].filter(Boolean).join(' '),
       image: character.image || '',
       attributes: {

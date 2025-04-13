@@ -74,11 +74,20 @@ watch(viewMode, (newMode) => {
                 {{ character.name }}
               </h3>
 
-              <img
-                :src="character.image"
-                :alt="character.name"
-                class="w-full h-50 object-scale-down mb-4"
-              >
+              <template v-if="character.image.startsWith('http')">
+                <img
+                  :src="character.image"
+                  :alt="character.name"
+                  class="w-full h-50 object-scale-down mb-4"
+                >
+              </template>
+              <template v-else>
+                <UIcon
+                  :name="character.image"
+                  class="size-48 mx-auto text-neutral-600"
+                />
+              </template>
+
               <div class="flex justify-end">
                 <NuxtLink :to="`/${universeId}/characters/${character.id}`">
                   <UButton class="cursor-pointer hover:scale-102">
