@@ -1,7 +1,4 @@
-import type { NatureAnimalCollectionItem } from '@nuxt/content'
 import type { Character, DataProvider } from './provider'
-import { queryCollection } from '#imports'
-import { generateIdFromString } from '~/utils/generateId'
 
 export const NatureProvider: DataProvider = {
   id: 'nature',
@@ -11,25 +8,24 @@ export const NatureProvider: DataProvider = {
   getCharacters: async (): Promise<Character[]> => {
     const animals = await queryCollection('natureAnimal').all()
 
-    return animals.map((animal: NatureAnimalCollectionItem) => ({
-      id: generateIdFromString(animal.name),
+    return animals.map((animal, index) => ({
+      id: index + 1,
       name: animal.name,
       image: animal.icon || '',
-      attributes: {
-      },
+      attributes: {},
     }))
   },
 
   getCharacterById: async (id: string): Promise<Character> => {
     const animals = await queryCollection('natureAnimal').all()
-    const animal = animals.find((a: NatureAnimalCollectionItem) => generateIdFromString(a.name) === Number(id))
+    const animal = animals[Number(id) - 1]
 
     if (!animal) {
       throw new Error(`Animal with id ${id} not found`)
     }
 
     return {
-      id: generateIdFromString(animal.name),
+      id: Number(id),
       name: animal.name,
       image: animal.icon || '',
       attributes: {
@@ -37,6 +33,7 @@ export const NatureProvider: DataProvider = {
         diet: animal.diet,
         size: animal.size,
         lifespan: animal.lifespan,
+
       },
     }
   },

@@ -10,7 +10,7 @@ const universe = computed(() => {
   return providers[universeId]
 })
 
-const { data: character, pending, error } = await useAsyncData(
+const { data: character, status, error } = await useAsyncData(
   `${universeId}-character-${characterId}`,
   async () => {
     if (!universe.value) {
@@ -42,7 +42,6 @@ function formatLabelKey(key: string): string {
 
   return `${replaceUnderscores(key)}:`
 }
-
 </script>
 
 <template>
@@ -54,7 +53,7 @@ function formatLabelKey(key: string): string {
         </NuxtLink>
       </header>
 
-      <div v-if="pending" class="text-center py-8">
+      <div v-if="status === 'pending'" class="text-center py-8">
         Loading character details...
       </div>
 
@@ -65,21 +64,14 @@ function formatLabelKey(key: string): string {
       <div v-else-if="character" class="max-w-lg mx-auto">
         <UCard :title="character.name">
           <template #header>
-            <template v-if="character.image.startsWith('http')">
-              <img
-                :src="character.image"
+            <div class="flex justify-center items-center">
+              <UniverseImage
+                :image="character.image"
                 :alt="character.name"
-                class="w-full h-60 object-contain rounded-xl"
-              >
-            </template>
-            <template v-else>
-              <div class="flex justify-center items-center h-60">
-                <UIcon
-                  :name="character.image"
-                  class="size-48 text-neutral-600"
-                />
-              </div>
-            </template>
+                image-class="w-full h-60 object-contain rounded-xl"
+                icon-class="size-48 text-neutral-600"
+              />
+            </div>
           </template>
 
           <div class="space-y-4">

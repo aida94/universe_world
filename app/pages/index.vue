@@ -13,6 +13,7 @@ const universes = Object.values(providers)
           Welcome to the home page!
         </h1>
       </header>
+
       <div class="grid gap-8 xl:grid-cols-2">
         <NuxtLink
           v-for="universe in universes"
@@ -24,19 +25,14 @@ const universes = Object.values(providers)
             <h2 class="text-xl font-semibold">
               {{ universe.displayName }} Universe
             </h2>
-            <template v-if="universe.image.startsWith('http')">
-              <img
-                :src="universe.image"
-                :alt="universe.displayName"
-                class="size-48 rounded-full object-cover mx-auto"
-              >
-            </template>
-            <template v-else>
-              <UIcon
-                :name="universe.image"
-                class="size-48 mx-auto text-secondary-400"
-              />
-            </template>
+
+            <UniverseImage
+              :image="universe.image"
+              :alt="universe.displayName"
+              image-class="size-48 rounded-full object-cover mx-auto"
+              icon-class="size-48 mx-auto text-secondary-400"
+            />
+
             <p class="mt-2">
               Explore the world of {{ universe.displayName }}
             </p>
