@@ -1,28 +1,22 @@
 <script setup lang="ts">
 import type { Attribute } from '~/data/providers/provider'
 
-const route = useRoute()
 const { providers } = useUniverseProvider()
 
-// Ensure these are being correctly extracted from the route
-const universeId = route.params.universe as string
-const characterId = route.params.id as string
+const universeId = useTypedRoute<{ universe: string }>().params.universe
+const characterId = useTypedRoute<{ id: string }>().params.id
 
 const universe = computed(() => {
   return providers[universeId]
 })
 
-// Add error handling and logging
 const { data: character, pending, error } = await useAsyncData(
   `${universeId}-character-${characterId}`,
   async () => {
-    try {
-      return await universe.value.getCharacterById(characterId)
+    if (!universe.value) {
+      throw new Error(`Universe ${universeId} not undefined or null`)
     }
-    catch (e) {
-      console.error('Error fetching character:', e)
-      throw e
-    }
+    return await universe.value.getCharacterById(characterId)
   },
   {
     immediate: true,
@@ -30,20 +24,25 @@ const { data: character, pending, error } = await useAsyncData(
 )
 
 function formatAttributeValue(value: Attribute): string {
+  const toString = (item: unknown) => String(item)
+  const replaceHyphens = (str: string) => str.replace(/-/g, ' ')
+
   if (Array.isArray(value)) {
-    return value.map(item =>
-      typeof item === 'string' ? item.replace(/-/g, ' ') : String(item),
-    ).join(', ')
+    return value
+      .map(toString)
+      .map(replaceHyphens)
+      .join(', ')
   }
-  if (typeof value === 'string') {
-    return value.replace(/-/g, ' ')
-  }
-  return String(value)
+
+  return replaceHyphens(toString(value))
 }
 
 function formatLabelKey(key: string): string {
-  return `${key.replace(/_/g, ' ')}:`
+  const replaceUnderscores = (str: string) => str.replace(/_/g, ' ')
+
+  return `${replaceUnderscores(key)}:`
 }
+
 </script>
 
 <template>
