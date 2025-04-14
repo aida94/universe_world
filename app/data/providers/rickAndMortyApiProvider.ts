@@ -1,5 +1,5 @@
 import type { Character, DataProvider } from './provider'
-import { useRickAndMortyApi } from '../api/rickAndMortyApi'
+import type { RickAndMortyApiResponse, RickAndMortyCharacter } from '~/types/rickAndMorty'
 
 export const RickAndMortyProvider: DataProvider = {
   id: 'rick-and-morty',
@@ -7,8 +7,8 @@ export const RickAndMortyProvider: DataProvider = {
   image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
 
   getCharacters: async (): Promise<Character[]> => {
-    const { fetchCharacters } = useRickAndMortyApi()
-    const data = await fetchCharacters()
+    // const { fetchCharacters } = useRickAndMortyApi()
+    const data = await $rickAndMorty<RickAndMortyApiResponse>('/character')
 
     return data.results.map((character) => {
       return {
@@ -28,8 +28,7 @@ export const RickAndMortyProvider: DataProvider = {
   },
 
   getCharacterById: async (id: string): Promise<Character> => {
-    const { fetchCharacterById } = useRickAndMortyApi()
-    const character = await fetchCharacterById(Number(id))
+    const character = await $rickAndMorty<RickAndMortyCharacter>(`/character/${id}`)
 
     return {
       id: character.id,

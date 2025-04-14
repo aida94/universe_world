@@ -1,5 +1,12 @@
 import type { Character, DataProvider } from './provider'
-import { usePokemonApi } from '../api/pokemonApi'
+import type { PokemonApiResponse, PokemonApiResponseById } from '~/types/pokemon'
+
+const POKEMON_IMAGE_BASE_URL = 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world'
+const DEFAULT_LIMIT = 50
+
+function buildImageUrlFromId(id: number) {
+  return `${POKEMON_IMAGE_BASE_URL}/${id}.svg`
+}
 
 export const PokemonProvider: DataProvider = {
   id: 'pokemon',
@@ -7,8 +14,7 @@ export const PokemonProvider: DataProvider = {
   image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
 
   getCharacters: async (): Promise<Character[]> => {
-    const { fetchCharacters, buildImageUrlFromId } = usePokemonApi()
-    const data = await fetchCharacters()
+    const data = await $pokemon<PokemonApiResponse>(`/pokemon?offset=0&limit=${DEFAULT_LIMIT}`)
 
     return data.results.map((character, index) => {
       return {
@@ -20,8 +26,7 @@ export const PokemonProvider: DataProvider = {
     })
   },
   getCharacterById: async (id: string): Promise<Character> => {
-    const { fetchCharacterById, buildImageUrlFromId } = usePokemonApi()
-    const data = await fetchCharacterById(Number(id))
+    const data = await $pokemon<PokemonApiResponseById>(`/pokemon/${id}`)
 
     return {
       id: data.id,
