@@ -1,7 +1,7 @@
 import type { Character, DataProvider } from './provider'
 import type { PokemonApiResponse, PokemonApiResponseById } from '~/types/pokemon'
 
-const POKEMON_IMAGE_BASE_URL = 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world'
+const POKEMON_IMAGE_BASE_URL = useRuntimeConfig().public.pokemonImageBaseUrl
 const DEFAULT_LIMIT = 50
 
 function buildImageUrlFromId(id: number) {

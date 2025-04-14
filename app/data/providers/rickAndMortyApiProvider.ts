@@ -7,7 +7,6 @@ export const RickAndMortyProvider: DataProvider = {
   image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
 
   getCharacters: async (): Promise<Character[]> => {
-    // const { fetchCharacters } = useRickAndMortyApi()
     const data = await $rickAndMorty<RickAndMortyApiResponse>('/character')
 
     return data.results.map((character) => {
