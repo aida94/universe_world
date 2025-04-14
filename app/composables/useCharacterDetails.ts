@@ -1,6 +1,7 @@
 import type { Character } from '~/data/providers/provider'
+import type { UniverseId } from '~/constants/universes'
 
-export function useCharacterDetails(universeId: string, characterId: string) {
+export function useCharacterDetails(universeId: UniverseId, characterId: string) {
   const { providers } = useUniverseProvider()
 
   const universe = computed(() => providers[universeId])
