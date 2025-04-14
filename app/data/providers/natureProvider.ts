@@ -1,10 +1,12 @@
 import type { Character, DataProvider } from './provider'
 import { UniverseId } from '~/constants/universes'
 
+const NATURE_PREVIEW_IMAGE = 'mdi:cat'
+
 export const NatureProvider: DataProvider = {
   id: UniverseId.NATURE,
   displayName: 'Nature',
-  image: 'mdi:cat',
+  image: NATURE_PREVIEW_IMAGE,
 
   getCharacters: async (): Promise<Character[]> => {
     const animals = await queryCollection('natureAnimal').all()

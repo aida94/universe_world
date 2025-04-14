@@ -2,10 +2,12 @@ import type { Character, DataProvider } from './provider'
 import type { RickAndMortyApiResponse, RickAndMortyCharacter } from '~/types/rickAndMorty'
 import { UniverseId } from '~/constants/universes'
 
+const RICK_AND_MORTY_PREVIEW_IMAGE = 'https://rickandmortyapi.com/api/character/avatar/1.jpeg'
+
 export const RickAndMortyProvider: DataProvider = {
   id: UniverseId.RICK_AND_MORTY,
   displayName: 'Rick & Morty',
-  image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+  image: RICK_AND_MORTY_PREVIEW_IMAGE,
 
   getCharacters: async (): Promise<Character[]> => {
     const data = await $rickAndMorty<RickAndMortyApiResponse>('/character')
