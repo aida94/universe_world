@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import type { UniverseId } from '~/constants/universes'
+
 const route = useTypedRoute<{ universe: string }>()
 const universeId = route.params.universe
 
-const { characters, status, error, universe } = useCharacterList(universeId)
+const { characters, status, error, universe } = useCharacterList(universeId as UniverseId)
 
 const storageKey = computed(() => `${universe.value?.displayName}-viewMode`)
 const { viewMode } = useViewMode(storageKey.value)

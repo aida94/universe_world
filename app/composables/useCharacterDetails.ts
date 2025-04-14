@@ -1,5 +1,5 @@
-import type { Character } from '~/data/providers/provider'
 import type { UniverseId } from '~/constants/universes'
+import type { Character } from '~/data/providers/provider'
 
 export function useCharacterDetails(universeId: UniverseId, characterId: string) {
   const { providers } = useUniverseProvider()

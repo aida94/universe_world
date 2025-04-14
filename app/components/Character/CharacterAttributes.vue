@@ -40,7 +40,7 @@ function formatLabelKey(key: string): string {
         variant="ghost"
         class="!cursor-default hover:bg-transparent hover:text-primary-500 capitalize font-semibold"
       />
-      <span>{{ formatAttributeValue(value) || "-" }}</span>
+      <span class="capitalize">{{ formatAttributeValue(value) || "-" }}</span>
     </div>
   </div>
 </template>

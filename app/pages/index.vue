@@ -21,7 +21,7 @@ const universes = Object.values(providers)
           :to="`/${universe.id}/characters`"
           class=""
         >
-          <UCard class="rounded-2xl shadow-md p-6 hover:shadow-xl hover:scale-102 transition text-center">
+          <UCard class="rounded-2xl shadow-md p-6 hover:shadow-xl hover:scale-102 transition text-center border border-neutral-200 dark:border-neutral-400">
             <h2 class="text-xl font-semibold">
               {{ universe.displayName }} Universe
             </h2>

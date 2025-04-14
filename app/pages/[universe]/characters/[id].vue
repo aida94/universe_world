@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { UniverseId } from '~/constants/universes'
+
 const route = useTypedRoute<{ universe: string, id: string }>()
 const { character, status, error, universe } = useCharacterDetails(
-  route.params.universe,
+  route.params.universe as UniverseId,
   route.params.id,
 )
 </script>
@@ -12,7 +14,7 @@ const { character, status, error, universe } = useCharacterDetails(
       <header class="border-b mb-8 py-2 text-xl">
         <NuxtLink
           :to="`/${route.params.universe}/characters`"
-          class="text-secondary-600 hover:text-secondary-800 flex items-center"
+          class="text-secondary-500 hover:text-secondary-600 flex items-center dark:hover:text-secondary-400"
         >
           <UIcon name="i-lucide-chevron-left" class="mr-2" />
           Back to {{ universe?.displayName }} Characters
