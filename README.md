@@ -1,105 +1,56 @@
-# Rick & Morty and Pokémon Application Challenge
+# Rick & Morty and Pokémon Application
 
-## Overview
+## Project Structure and Architecture
 
-Your mission is to build a structured **Nuxt** application that showcases two iconic universes: **Rick & Morty characters** and **Pokémon**.
+This project follows a clean and modular architecture, organized as follows:
 
-The app should be designed for easy expansion, making it effortless to add new universes down the road.
-
-## Core Requirements
-
-Your application must include:
-
-1. **Overview Pages**: Separate pages for Rick & Morty characters and Pokémon.
-2. **Detail Pages**: Individual pages displaying detailed information about a selected character.
-3. **View Options**: Both grid and list view modes for browsing characters.
-4. **Consistent Design**: A uniform look and feel across all universes.
-5. **Scalable Architecture**: Reusable components that can handle different data sources seamlessly.
-
-## Data Sources
-
-You'll need to integrate these APIs:
-
-- [Rick and Morty API](https://rickandmortyapi.com/documentation)
-- [Pokémon API](https://pokeapi.co/docs/v2)
-
-## Bonus Points
-
-Want to push things further? Earn extra points by adding:
-
-- **Lord of the Rings characters**
-- **Animals/Nature**
-
-The starter code includes examples for these universes—study them, learn from them, and embrace the pattern to extend your application.
-
-## Reference Design
-
-While you have creative freedom, reference wireframes are provided to steer your implementation:
-
-[![Wireframes](./public/images/wireframes.svg)](./public/images/wireframes.svg)
-
-## Key Architectural Principles
-
-### Separation of Concerns
-
-Your application should maintain a clear separation between:
-
-- **UI Components**: Responsible only for displaying data (no business logic here!)
-- **Data Providers**: Fetch and process API data
-
-### Component Design Best Practices
-
-#### Avoid Hard-Coding Universe Logic
-
-A bad approach (don’t do this! 👇):
-
-```ts
-// Messy and hard to maintain:
-if (props.character.universe === 'Rick & Morty') {
-  // Special handling for Rick & Morty
-}
-else if (props.character.universe === 'Pokémon') {
-  // Special handling for Pokémon
-}
+```
+app/
+├── components/        # Reusable UI components
+│   ├── Application/  # App-wide components (header, layout)
+│   ├── Character/    # Character-related components
+│   └── Display/      # Display mode components
+├── composables/      # Shared logic and data handling
+├── constants/        # App-wide constants and enums
+├── data/
+│   └── providers/    # Data providers for different universes
+├── pages/           # Route components
+└── types/           # TypeScript type definitions
 ```
 
-A much better approach: Design a flexible system where new universes can be added **without touching existing code**. Think **data-driven**, not hardcoded.
+### Key Architectural Decisions
 
-#### Single Responsibility Principle
+#### Data Providers
 
-Each component should do **one thing well**:
+Each universe (Rick & Morty, Pokémon, etc.) has its own data provider that implements a common interface. This makes adding new universes straightforward without modifying existing code.
 
-- Data fetching components → **Only fetch and process data**
-- UI components → **Only render the provided data**
+#### Composables
 
-## Evaluation Criteria
+- `useCharacterList` and `useCharacterDetails` handle data fetching and processing
+- `useViewMode` manages display preferences (grid/list) per universe using localStorage
+- `useUniverseProvider` centralizes access to all universe providers
 
-Your submission will be judged on:
+#### State Management
 
-1. **Code Organization**: Clean structure, clear separation of concerns
-2. **Component Reusability**: Can components be used across different contexts?
-3. **Scalability**: How easy is it to add new universes?
-4. **User Experience**: Is navigation and interaction smooth?
-5. **Technical Implementation**: Proper API integration and efficient data handling
+Given the project's simplicity and limited state requirements, I opted not to include a state management library like Pinia. The main state needs are:
 
-## Submission Process
+1. Character data (handled by composables with `useAsyncData`)
+2. Display mode preferences (managed via localStorage per universe)
 
-Fork the repository, implement your solution, and submit it as a new repository.
+#### Display Mode Implementation
 
----
+I implemented a per-universe display mode preference using localStorage:
 
-## Submission Checklist
+- Each universe's view mode is stored separately (e.g., "Pokemon-viewMode", "RickAndMorty-viewMode")
+- The `useViewMode` composable handles saving and retrieving these preferences
+- This approach provides a better user experience by remembering each universe's preferred view
 
-Before submitting, double-check that your app meets the following requirements:
+### Adding New Universes
 
-|     | Requirement                                                                    |
-| --- | ------------------------------------------------------------------------------ |
-| ✔  | Separate overview pages for Rick & Morty and Pokémon                           |
-| ✔  | Detail pages for individual characters                                         |
-| ✔  | Consistent design across all universes                                         |
-| ✔  | Grid and list view options (bonus: each universe remembers its preferred view) |
-| ✔  | UI components focused exclusively on presentation                              |
-| ✔  | Data handling separated from rendering logic                                   |
-| ✔  | Reusable component structure that accommodates different data sources          |
+To add a new universe:
 
-This assignment is all about building a **scalable, maintainable** frontend application while keeping things neat, modular, and fun. Happy coding! 🚀
+1. Create a new provider in `data/providers/`
+2. Add the universe ID to `constants/universes.ts`
+3. Register the provider in `useUniverseProvider`
+
+The rest of the application will automatically handle the new universe without additional changes.
