@@ -8,10 +8,15 @@ useHead({
 
 <template>
   <VitePwaManifest />
-  <UApp>
-    <Application>
-      <ApplicationHeader />
+  <NuxtLayout>
+    <UApp
+      :ui="{
+        notifications: {
+          provider: '$dynamic-slots',
+        },
+      }"
+    >
       <NuxtPage />
-    </Application>
-  </UApp>
+    </UApp>
+  </NuxtLayout>
 </template>
