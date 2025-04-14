@@ -25,16 +25,21 @@ const { character, status, error, universe } = useCharacterDetails(
         Loading character details...
       </div>
 
-      <div v-else-if="error" class="text-center py-8 text-red-600">
-        Error loading character: {{ error.message }}
-      </div>
-
       <div v-else-if="character" class="max-w-lg mx-auto">
         <CharacterDetailCard :character="character" />
       </div>
 
       <div v-else class="text-center py-8">
-        Character not found
+        <h2 class="text-2xl font-bold mb-4">Character Not Found</h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+          The character you're looking for doesn't exist or has been removed.
+        </p>
+        <UButton
+          :to="`/${route.params.universe}/characters`"
+          icon="i-lucide-arrow-left"
+          label="Return to Characters"
+          variant="outline"
+        />
       </div>
     </UContainer>
   </div>
