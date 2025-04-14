@@ -1,7 +1,8 @@
 import type { Character, DataProvider } from './provider'
+import { UniverseId } from '~/constants/universes'
 
 export const NatureProvider: DataProvider = {
-  id: 'nature',
+  id: UniverseId.NATURE,
   displayName: 'Nature',
   image: 'mdi:cat',
 

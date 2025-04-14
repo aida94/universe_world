@@ -1,8 +1,9 @@
 import type { Character, DataProvider } from './provider'
 import type { RickAndMortyApiResponse, RickAndMortyCharacter } from '~/types/rickAndMorty'
+import { UniverseId } from '~/constants/universes'
 
 export const RickAndMortyProvider: DataProvider = {
-  id: 'rick-and-morty',
+  id: UniverseId.RICK_AND_MORTY,
   displayName: 'Rick & Morty',
   image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
 

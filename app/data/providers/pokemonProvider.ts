@@ -1,37 +1,37 @@
 import type { Character, DataProvider } from './provider'
 import type { PokemonApiResponse, PokemonApiResponseById } from '~/types/pokemon'
+import { UniverseId } from '~/constants/universes'
 
-const POKEMON_IMAGE_BASE_URL = useRuntimeConfig().public.pokemonImageBaseUrl
-const DEFAULT_LIMIT = 50
-
-function buildImageUrlFromId(id: number) {
-  return `${POKEMON_IMAGE_BASE_URL}/${id}.svg`
+function buildImageUrlFromId(id: number, baseUrl: string) {
+  return `${baseUrl}/${id}.svg`
 }
 
 export const PokemonProvider: DataProvider = {
-  id: 'pokemon',
+  id: UniverseId.POKEMON,
   displayName: 'Pokemon',
   image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
 
   getCharacters: async (): Promise<Character[]> => {
-    const data = await $pokemon<PokemonApiResponse>(`/pokemon?offset=0&limit=${DEFAULT_LIMIT}`)
+    const config = useRuntimeConfig()
+    const data = await $pokemon<PokemonApiResponse>(`/pokemon?offset=0&limit=50}`)
 
     return data.results.map((character, index) => {
       return {
         id: index + 1,
         name: character.name,
-        image: buildImageUrlFromId(index + 1),
+        image: buildImageUrlFromId(index + 1, config.public.pokemonImageBaseUrl),
         attributes: {},
       }
     })
   },
   getCharacterById: async (id: string): Promise<Character> => {
+    const config = useRuntimeConfig()
     const data = await $pokemon<PokemonApiResponseById>(`/pokemon/${id}`)
 
     return {
       id: data.id,
       name: data.name,
-      image: buildImageUrlFromId(data.id),
+      image: buildImageUrlFromId(data.id, config.public.pokemonImageBaseUrl),
       attributes: {
         name: data.name,
         height: data.height,
@@ -40,7 +40,6 @@ export const PokemonProvider: DataProvider = {
         types: data.types.map(type => type.type.name),
         held_items: data.held_items.map(item => item.item.name),
       },
-
     }
   },
 }
