@@ -2,7 +2,7 @@
 import type { UniverseId } from '~/constants/universes'
 
 const route = useTypedRoute<{ universe: string, id: string }>()
-const { character, status, error, universe } = useCharacterDetails(
+const { character, status, universe } = useCharacterDetails(
   route.params.universe as UniverseId,
   route.params.id,
 )
@@ -30,7 +30,9 @@ const { character, status, error, universe } = useCharacterDetails(
       </div>
 
       <div v-else class="text-center py-8">
-        <h2 class="text-2xl font-bold mb-4">Character Not Found</h2>
+        <h2 class="text-2xl font-bold mb-4">
+          Character Not Found
+        </h2>
         <p class="text-neutral-600 dark:text-neutral-400 mb-6">
           The character you're looking for doesn't exist or has been removed.
         </p>
