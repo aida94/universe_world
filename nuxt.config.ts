@@ -17,6 +17,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    public: {
+      pokemonImageBaseUrl: 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world',
+    },
+  },
+
   future: {
     compatibilityVersion: 4,
   },
@@ -62,10 +68,4 @@ export default defineNuxtConfig({
   },
 
   pwa,
-
-  runtimeConfig: {
-    public: {
-      pokemonImageBaseUrl: 'https://unpkg.com/pokeapi-sprites@2.0.2/sprites/pokemon/other/dream-world'
-    }
-  },
 })
